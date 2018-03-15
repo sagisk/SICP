@@ -1,0 +1,24 @@
+# R code
+factorial_recursive <- function(n){
+  if(n == 1) return(1)
+  else n*factorial(n-1)
+     }
+ factorial_iterative <- function(n){
+   iter <- function(i, n){
+     if(n == 1) return(i)
+     else iter(n*i, n-1)
+     }
+   iter(1, n)
+   }
+;; exercise
+;; 1-st proc
+(define (+ 4 5)
+    (if (= 4 0)
+         5
+         (inc (+ (dec 4) 5)))) ;; the same as (+ 1 (+ (- 4 1) 5)) = 1+4-1+5=4+5=9
+;; 2-nd proc
+(define (+ 4 5)
+  (if (= 4 0)
+         5
+         (+ (dec 4) (inc b))));; the same as (+ (- 4 1) (+ 5 1))= 4-1 + 5+1=4+5=9
+         
