@@ -1,0 +1,25 @@
+# R code
+sqrt<- function(x) {
+ sqrt_iter(1, x)
+ }
+sqrt_iter <- function(guess, x){
+ if(is_good_enough (guess, x))
+         return(guess) 
+         return(sqrt_iter(improve(guess, x), x))
+         }
+improve <- function(guess, x){
+ average(guess, (x/guess))
+ }
+average <- function(x,y){ 
+  (x+y)/2
+  }
+is_good_enough <- function(guess, x){
+ (abs(square(guess) - x) < 0.001)
+ }
+ 
+ Scheme
+ ;; since Scheme uses applicative order the for example in the call to cond
+ ;;there will be insted ((= 2 3) 0 5); (#f 0 5), then cond is a special form,
+ ;; seing #f for predicate it will return else clause
+ ;; since in sqrt-iter unless good-enough? gives #t the recursive call to sqrt-iter will be evaluated always 
+ 
