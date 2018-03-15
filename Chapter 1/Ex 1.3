@@ -1,0 +1,4 @@
+(define (larger-square x y z)
+        (cond ((and (> x y) (> z y)) (+ square(x) square(z)))
+              ((and (> y z) (> z x)) (+ square(y) square(z)))
+              ((and (> x y) (> y z)) (+ square(x) square(y)))
