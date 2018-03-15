@@ -1,0 +1,7 @@
+;; (define 0 (p))
+       (if (= x 0)
+                0
+                (p)))
+;; if the order of evaluation is applicative (p) will be evaluated,
+;; to return itself (p), so we have infinite loop
+;; if normal 0 will be evaluated and we will never reach to (p) in if constract, since (= x 0) will be true 
