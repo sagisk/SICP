@@ -1,0 +1,3 @@
+(define (composition f g)
+   (lambda(x)
+       (f (g x))))
