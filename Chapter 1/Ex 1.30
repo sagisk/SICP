@@ -1,0 +1,13 @@
+;;sum-recurive
+(define (sum term a next b)
+ (if (> a b)
+        0
+        (+ (term a)
+ (sum term (next a) next b))))
+ ;;sum-iteration
+ (define (sum term a b)
+   (define (iter a result)
+        (if (= result 0)
+            a
+        (iter (+ a (term result)) (- result 1)))
+    (iter 0 b))
