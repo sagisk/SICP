@@ -1,0 +1,4 @@
+(define (repeat f n)
+        (if (n < 1)
+          (lambda(x) x)
+           (compose f (repeat f (- n 1))))) 
