@@ -1,0 +1,7 @@
+(define (cont-frac n d k)
+  (if (= k 0) 0
+        (/ (n 1) 
+           (cont-frac
+                  (lambda(i) (n (+ i 1)))
+                  (lambda(i) (d (+ i 1)))
+                   (- k 1)))))
