@@ -1,0 +1,6 @@
+(define (cubic a b c)
+   (lmabda(x)
+      (+ (cube x)
+         (* a (square x)) 
+        (* b x) 
+        c))) 
