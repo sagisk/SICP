@@ -1,0 +1,12 @@
+
+(define (make-rect bottom-left top-right) (cons bottom-left top-right))
+
+(define (bottom-right x) (make-point (y-point (cdr x)) (x-point (car x)))
+(define (top-left x) (make-point (x-point (car x)) (y-point (cdr x)))
+
+(define (width-rect rect) 
+   (abs (- (x-point (bottom-left rect)) 
+           (x-point (bottom-right rect))))) 
+ (define (height-rect rect) 
+   (abs (- (y-point (bottom-left rect)) 
+           (y-point (top-left rect))))) 
