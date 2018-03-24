@@ -1,0 +1,2 @@
+ (deifne (make-center-percent center tol)
+   (cons (- center (* center tol)) (+ center (* center tol))))
