@@ -1,0 +1,13 @@
+Write a procedure fringe that takes as argument a tree (represented as a list) and returns a
+list whose elements are all the leaves of the tree arranged in left-to-right order
+
+;;cope with one list not with (fringe (list x x))
+(define (fringe item)
+  (cond ((null? item) '())
+        ((not (pair? item)) item)
+        (else (append (car x)
+                            (fringe (cdr x))))))
+                            
+ ;; modified version
+                            
+                           
