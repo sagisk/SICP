@@ -1,0 +1,13 @@
+(square-list (list 1 2 3 4))
+
+Here are two different definitions of square-list. Complete both of them by filling in the missing
+expressions:
+a) (define (square-list items)
+  (if (null? items)
+    nil
+   (cons (square (car items) (square-list (cdr items)))
+
+b) (define (square-list items)
+ (map (lambda(x) (square x)) items))
+ 
+ (define (square x) (* x x))
