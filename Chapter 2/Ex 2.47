@@ -1,0 +1,16 @@
+(define (make-frame origin edge1 edge2)
+ (list origin edge1 edge2))
+ 
+(define (make-frame origin edge1 edge2)
+ (cons origin (cons edge1 edge2)))
+For each constructor supply the appropriate selectors to produce an implementation for frames. 
+
+
+a) 
+(define (select-origin x) (car x))
+(define (select-edge1 x) (car (cdr x)))
+(define (select-edge2 x) (cdr (cdr x)))
+b)
+(defne (select-origin x) (car x))
+(define (select-edge1 x) (cadr x))
+(define (select-edge2 x) (cddr x))
