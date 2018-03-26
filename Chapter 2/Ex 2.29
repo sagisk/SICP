@@ -1,0 +1,14 @@
+a) Write the corresponding selectors left-branch and right-branch, which return the branches of a
+mobile, and branch-length and branch-structure, which return the components of a branch
+(define (left-branch x) (car x))
+(define (right-branch x) (car (cdr x)))
+
+(define (branch-length x) (car x))
+(define (branch-structure x) (car (cdr x)))
+
+b)
+(define (total-weight mobile)
+   (let ((right (right-branch mobile))
+         (left (left-branch mobile)))
+         (+ (branch-structure right)
+            (branch-structure left))))
