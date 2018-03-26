@@ -1,0 +1,5 @@
+(define (tree-map proc tree)
+  (cond ((null? tree) 0)
+        ((not (pair? tree)) (proc tree))
+        (else (tree-map proc (car tree))
+              (tree-map proc (cdr tree)))))
