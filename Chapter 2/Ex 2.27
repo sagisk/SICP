@@ -1,0 +1,10 @@
+(define (reverse lst)
+  (if (null? lst)
+        '()
+      (append (reverse (cdr lst)) (list (car lst)))))
+      
+ (define (deep-reverse item) 
+   (cond ((null? item) '()) 
+         ((not (pair? item)) item) 
+         (else (append (deep-reverse (cdr item))  
+                       (list (deep-reverse (car item))))))) 
