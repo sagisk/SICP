@@ -1,0 +1,17 @@
+Right-split and up-split can be expressed as instances of a general splitting
+operation. Define a procedure split with the property that evaluating
+
+(define (right-split painter n)
+ (if (= n 0)
+ painter
+ (let ((smaller (right-split painter (- n 1))))
+ (beside painter (below smaller smaller)))))
+ 
+ (define (split proc1 proc2)
+   (define (rec painter n)
+   (if (= n 0)
+        painter
+      (let ((part (split painter (- n 1))))
+      (proc1 painter (proc2 part part)))))
+ rec)
+  
