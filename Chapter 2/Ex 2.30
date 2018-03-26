@@ -1,0 +1,5 @@
+(define (square-tree tree)
+  (cond ((null? tree) 0)
+        ((not (pair? (car tree))) (cons (square (car tree)) (square-tree (cdr tree))))
+        (else (cons (square-tree (car tree)) 
+                     (square-tree (cdr tree))))))
