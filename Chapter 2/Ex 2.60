@@ -1,0 +1,5 @@
+Element-of-set remains the same
+adjoin-set does not have to look if there is the same value in list
+(define (adjoin-set x set) 
+   (cons x set)) 
+Intersection remains   
