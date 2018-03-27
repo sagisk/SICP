@@ -1,0 +1,46 @@
+ (cond ((number? exp) 0)
+ ((variable? exp) (if (same-variable? exp var) 1 0))
+ ((sum? exp)
+ (make-sum (deriv (addend exp) var)
+ (deriv (augend exp) var)))
+ ((product? exp)
+ (make-sum
+ (make-product (multiplier exp)
+ (deriv (multiplicand exp) var))
+ (make-product (deriv (multiplier exp) var)
+ (multiplicand exp))))
+ <more rules can be added here>
+ (else (error "unknown expression type -- DERIV" exp))))
+a)  number?, same-variable? are predicates. there's nothing to dispatch.
+b) Write the procedures for derivatives of sums and products, and the auxiliary 
+code required to install them in the table used by the program above.
+
+(define (sum-deriv exp var)
+    (make-sum (deriv (addend exp) var)
+ (deriv (augend exp) var)))
+ (define (addend expr) (car expr)) 
+   (define (augend expr) (cadr expr)) 
+   (define (make-sum x1 x2) 
+         (cond ((and (number? x1) (number? x2)) (+ x1 x2)) 
+               ((=number? x1 0) x2) 
+               ((=number? x2 0) x1) 
+               (else (list '+ x1 x2))))
+ 
+(define (prod-deriv exp env)
+ make-sum
+ (make-product (multiplier exp)
+ (deriv (multiplicand exp) var))
+ (make-product (deriv (multiplier exp) var)
+ (multiplicand exp))))
+ (define (multiplier expr) (car expr)) 
+  (define (multiplicand expr) (cadr expr)) 
+  (define (make-product x1 x2) 
+    (cond ((and (number? x1) (number? x2)) (* x1 x2)) 
+          ((=number? x1 1) x2) 
+          ((=number? x2 1) x2) 
+          ((or (=number? x1 0) (=number? x2 0)) 0) 
+          (else (list '* x1 x2)))) 
+          
+ (put 'deriv '+ sum-deriv)
+ (put 'deriv '* prod-deriv)
+ d) (put '+ 'deriv sum-deriv)
