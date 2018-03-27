@@ -1,0 +1,13 @@
+(define (lookup given-key set-of-records)
+ (cond ((null? set-of-records) false)
+ ((equal? given-key (key (car set-of-records)))
+ (car set-of-records))
+ (else (lookup given-key (cdr set-of-records)))))
+
+(define (lookup key set)
+ (cond ((null? set) false)
+ ((= key (key (entry set)))
+ (entry set))
+ ((< key (key (entry set)))
+      (lookup key (lefth-branch set)))
+ (else (lookup key (right-branch set)))
