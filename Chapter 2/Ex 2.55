@@ -1,0 +1,4 @@
+(car ''abracadabra)
+
+;;interpreter translates it to
+(quote (quote abracadabra))
