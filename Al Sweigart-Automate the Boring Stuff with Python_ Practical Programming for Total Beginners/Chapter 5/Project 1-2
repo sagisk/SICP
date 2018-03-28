@@ -1,0 +1,13 @@
+inventory = {'rope': 1, 'torch': 6, 'gold coin': 42, 'dagger': 1, 'arrow': 12}
+
+for i in range(0, len(inventory)):
+    print(list(inventory.values())[i], end=" ")
+    print(list(inventory.keys())[i])
+    print("Total number of items:" + sum(list(inventory.values())))
+
+
+def addToInventory(inventory,addItems):
+    for i in range(len(addItems)):
+        inventory.setdefault(addItems[i],0)
+        inventory[addItems[i]] = inventory[addItems[i]] + 1
+    return inventory
