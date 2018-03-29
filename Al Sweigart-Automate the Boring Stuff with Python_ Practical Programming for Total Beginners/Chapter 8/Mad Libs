@@ -1,0 +1,17 @@
+# can't cope with . dot's are removed after 
+# main disadvandage is that string was rewritten entirly insetead of putting words
+file_open = open('C:\\Users\\Sargis\\Desktop\\hello.txt', 'r')
+file = file_open.read()
+file_split = re.findall('\w+', file)
+key_words = ['ADJECTIVE', 'NOUN', 'VERB']
+for j in range(0, len(file_split)):
+    for i in range(0, len(key_words)):
+        if key_words[i] == file_split[j]:
+            print('Enter an %s' % key_words[i].lower())
+            file_split[j] = input()
+            new_file = open('C:\\Users\\Sargis\\Desktop\\hello.txt', 'w')
+            new_file.write(' '.join(file_split))
+        else:
+            continue
+new_file.close()
+file_open.close()
