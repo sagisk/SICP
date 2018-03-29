@@ -1,0 +1,7 @@
+(put 'zero? '(scheme-number scheme-number) (lambda(x)
+                                                   (= x 0)))
+(put 'zero? '(rationale rationale) (lambda(x)
+                                        (= (numer x) 0)))
+(put 'zero? '(complex complex) (lambda(x)
+                                  (and (= (real x) 0)
+                                       (= (imag x) 0))))
