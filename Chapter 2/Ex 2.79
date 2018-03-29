@@ -1,0 +1,13 @@
+    
+(put 'equ? '(scheme-number scheme-number) =)
+(put 'equ? '(rationale rationale) (lambda(x y)
+                                         (if (and (= (numer x) (numer y))
+                                              (= (denom x) (denom y)))
+                                                #t
+                                                #f))
+                                                
+(put 'equ? '(complex complex) (lambda(x y)
+                                    (if (and (= (real x) (real y))
+                                              (= (imag x) (imag y)))
+                                                #t
+                                                #f))
