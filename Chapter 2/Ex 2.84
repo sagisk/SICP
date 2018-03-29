@@ -1,0 +1,22 @@
+
+ 
+ (define (apply-generic op . args)
+       (let ((type-tags (map type-tag args)))
+       (let ((proc (get op type-tags)))
+       (if proc
+        (apply proc (map contents args))
+       (let ((type1 (car type-tags))
+            (type2 (cadr type-tags))
+         (if (not (eq? type1 type2))
+               (raise (type1 type2))
+             (let ((proc (get op (map type-tag type2)))) 
+                       (if proc 
+                           (apply proc (map contents type2)) 
+                           (no-method)))
+                       (no-method))))))))
+                       
+   (define (raise x y)
+      (if (eq? x y)
+              y
+          (raise (cdr x) y)))
+   (define (types) (list '(number rational complex)))
