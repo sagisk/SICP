@@ -1,0 +1,29 @@
+# only even elements in elem have style attribute
+import bs4, requests
+
+def even(n):
+   if n % 2 == 0:
+       return True
+   else:
+       return False
+
+print('What you want to find?')
+request = input()
+img = requests.get('https://www.flickr.com/search/?text='+request)
+img.raise_for_status()
+
+soup = bs4.BeautifulSoup(img.text)
+
+elem = soup.select('main div div div div')
+img_url = [None] * int(len(elem)/2)
+img_data = [None] * int(len(elem)/2)
+for i in range(0, int(len(elem)/2)):
+    if even(i):
+        print('Downlading image number ' + str(i))
+        img_url[i] = 'https://' + elem[i].attrs['style'].split('background-image:')[-1][7:-1]
+        img_data[i] = requests.get(img_url[i]).content
+        with open('image_name'+''.join(str(i))+'.jpg', 'wb') as handler:
+            handler.write(img_data[i])
+    else:
+        even(i + 1)
+
