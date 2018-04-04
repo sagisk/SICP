@@ -14,3 +14,31 @@
            (else (error "Unknown request -- MAKE-ACCOUNT"
                                              m))))
  dispatch)
+ 
+(define (make-monitored proc) 
+   (let ((count 0)) 
+     (lambda (arg) 
+       (cond ((eq? arg 'how-many-calls?) count) 
+             ((= count 2) (lambda(x) "Call police"))
+             (else (begin (set! count (+ count 1)) 
+                          (proc arg)))))))
+                          
+;;modified
+
+(define (make-account balance pas)
+   (define (withdraw amount)
+      (if (>= balance amount)
+       (begin (set! balance (- balance amount))
+             balance)
+             "Insufficient funds"))
+  (define (deposit amount)
+      (set! balance (+ balance amount))
+            balance)
+       (let ((count 0))
+  (define (dispatch password m)
+    (if (not (eq? password pas)) (begin (set! count (+ 1 count) (lambda(x) "Wrong password"))
+     (cond ((eq? m 'withdraw) withdraw)
+           ((eq? m 'deposit) deposit)
+           (else (error "Unknown request -- MAKE-ACCOUNT"
+                                             m))))
+ dispatch)
