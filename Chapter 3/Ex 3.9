@@ -1,0 +1,51 @@
+(define (factorial n)
+ (if (= n 1)
+ 1
+ (* n (factorial (- n 1)))))
+ 
+ --------------------------------------------------|
+ Global           (factorial 6)
+ factorial---
+            |
+ --------------------------------------------------|-------------------|-----------------------etc n = 4,3,2------|
+            | |                                    |                   |                                          |
+            | |                           --------------------        -------------                           -----------
+           ()()                            E1     n:=6                  E2 n:=5                               E6   n:=1
+            |
+            param: n                      --------------------        --------------                          -----------
+            body:(if (= n 1)                                 | 
+                    1                                        |
+               (* n (factorial (- n 1)))))                  ()()
+                                                            |
+                                                      body: (if (= n 1)
+                                                                  1
+                                                            (* n (factorial (- n 1)))))
+                                                            
+ (define (factorial n)
+ (fact-iter 1 1 n))
+(define (fact-iter product counter max-count)
+ (if (> counter max-count)
+ product
+ (fact-iter (* counter product)
+ (+ counter 1)
+ max-count)))
+ --------------------------------------------------|
+ Global           (factorial 6)
+ factorial---
+            |
+ --------------------------------------------------|-------------------|-----------------------etc up to E8------|
+            | |                                    |                   |                                          
+            | |                           --------------------        -------------                           
+           ()()                            E1     n:=6                  E2 prod = 1                        
+            |                                                         counter = 1
+            |                                                         max-counter = 6
+            param: n                      --------------------        --------------                         
+            body:..                                          | 
+                                                             |
+                                                            ()()
+                                                            |
+                                                        (fact-iter 1 1 n)
+                                                      
+                                                            
+ 
+ 
