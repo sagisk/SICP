@@ -1,0 +1,4 @@
+(define (count-pairs x)
+  (if (not (pair? (car x)))
+        0
+      (+ 1 (count-pairs (cdr x)))))
