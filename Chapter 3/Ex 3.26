@@ -1,0 +1,11 @@
+
+ (define (assoc key records)
+ (cond ((null? records) false)
+      ((= key (caar records)) (enty records))
+      ((> key (caar records)) (assoc key (left-hand records)))
+      (else (assoc key (right-hand records)))))
+     
+     
+ (define (entry tree) (car tree))
+ (define (left-hand tree) (cadr tree))
+ (define (right-hand tree) (caddr tree))    
