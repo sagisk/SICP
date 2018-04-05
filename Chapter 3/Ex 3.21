@@ -1,0 +1,2 @@
+define (print-queue q)
+  (print (front-ptr q)))
