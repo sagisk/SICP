@@ -1,0 +1,5 @@
+(define (ln n)
+     (cons (/ 1 n) (streak-map - (ln (+ n 1)))))
+
+(define (stream-ln 
+       (partial-sums (ln 1)))
