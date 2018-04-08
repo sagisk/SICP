@@ -1,0 +1,3 @@
+ S0, S0 + S1, S0 + S1 + S2
+ (define (partial-sums s) 
+         (cons-stream (stream-car s) (add-streams (stream-cdr s) (partial-sums s)))) 
