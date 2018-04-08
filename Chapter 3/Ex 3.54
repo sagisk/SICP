@@ -1,0 +1,2 @@
+(define (mul-streams str1 str2)
+ (stream-map * str1 str2))
