@@ -1,1 +1,17 @@
-NO
+;;Reasoner version
+(define (sqrt-stream x)
+ (cons-stream 1.0
+ (stream-map (lambda (guess)
+ (sqrt-improve guess x))
+ (sqrt-stream x))))
+;;book version
+(define (sqrt-stream x)
+ (define guesses
+ (cons-stream 1.0
+ (stream-map (lambda (guess)
+ (sqrt-improve guess x))
+ guesses)))
+ guesses)
+
+
+NO! by calling (sqrt-stream x) second time creates all stream, without remembering the previous computations.
