@@ -1,0 +1,10 @@
+(define (ramunajan stream) 
+   (if (= (+ (cube (stream-car stream)) (cube (stream-car (stream-cdr stream)))) 
+          (+ (cube (stream-car (stream-cdr (stream-cdr stream))))) (cube (stream-car (stream-cdr (stream-cdr (stream-cdr stream)))))))
+       (cons-stream (list (cube (stream-car stream)) 
+                          (stream-car stream)
+                          (stream-car (stream-car stream)))
+                          (ramunajan (stream-car (stream-cdr (stream-cdr (stream-cdr (stream-cdr stream))))))
+     (ramunajan (stream-cdr stream))))
+                          
+ (define (cube x) (* x x x))                           
