@@ -1,0 +1,10 @@
+(define (triples a b c)
+  (list (stream-car a)
+        (stream-car b)
+        (stream-car c))
+        (interleave 
+                (stream-map (lambda(x) (stream-car a) x)
+                             (stream-car (pair b c)))
+                             (triples (stream-cdr a) (stream-cdr b) (stream-cdr c))))
+         
+        
