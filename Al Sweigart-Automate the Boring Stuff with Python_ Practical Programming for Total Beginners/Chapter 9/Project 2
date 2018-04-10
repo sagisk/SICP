@@ -1,0 +1,4 @@
+for folderName, subfolders, filenames in os.walk("."):
+    for filename in filenames:
+      print(os.path.join(folderName, filename)+ ' size'+ ' is '+ str(os.path.getsize(os.path.join(folderName, filename))))
+      print(os.path.getsize(os.path.join(folderName, filename)))
