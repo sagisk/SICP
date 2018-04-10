@@ -1,0 +1,5 @@
+for foldername, subfolders, filenames in os.walk("."):
+    for filename in filenames:
+        if filename.endswith('.txt'):
+            print(os.path.join(foldername, filename))
+            shutil.copy(os.path.join(foldername, filename), 'write_some_folder_path')
