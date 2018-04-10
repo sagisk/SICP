@@ -1,3 +1,5 @@
+import os, shutill
+
 for foldername, subfolders, filenames in os.walk("."):
     for filename in filenames:
         if filename.endswith('.txt'):
