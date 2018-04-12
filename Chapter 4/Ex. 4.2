@@ -1,0 +1,29 @@
+;;the idea is: applications appears before the clause for assignments
+
+(define (eval exp env)
+  (cond ((self-evaluating? exp) exp)
+        ((variable? exp) (look-up-variable exp env));;search variable(symbol) in environment
+        ((quoted? exp) (text-of-quotation exp env));;extract the value of quotation
+        ((assignment? exp) (eval-assignment exp env));;assign value to variable of exp in env
+        ((definition? exp) (eval-definition exp env))
+        ((if? exp) (eval-if exp env));; if predicate true evaluate consequent else alternatve
+        ((lambda? exp)
+          (make-procedure (lambda-paramters exp)
+                          (lambda body exp)
+                          env))
+        ((begin? exp) (eval-sequence (begin-actions exp) env));; eval expressions in their natural order
+        ((cond? exp) (eval (cond->if exp) env))
+        ((application? exp)
+            (apply (eval (operator exp) env)
+                   (list-of-values (operands exp) env)));;apply takes procedures & arguments
+                   ;;therefore eval operator to get value and eval operands to get arguments
+        (else (error "Unknown expression type -- EVAL" exp))))
+        
+  (define (application? exp) (pair? exp))
+  (define (assignment? exp) (tagged-list? exp 'set!))
+  
+  1) since assignment is a pair it will never reach to assignment
+  2)(define (application? exp) (tagged-list? exp 'call))
+    (define (operator exp) (cadr exp))
+    (define (operands exp) (cddr exp))
+        
