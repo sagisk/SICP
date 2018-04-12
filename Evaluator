@@ -98,8 +98,19 @@ It is important to understand that:
      'ok)                   
                
 (define (set-variable-value! var val env)
-        (begin (set! var val)
-               (expand-environment var val env)))
+ (define (env-loop env)
+   (define (scan vars vals)
+         (cond ((null? vars)
+                   (env-loop (enclosing-environment env)))
+               ((eq? var (car vars))
+                         (set-car! vals val))
+              (else (scan (cdr vars) (cdr vals)))))
+               (if (eq? env the-empty-environment)
+                (error "Unbound variable -- SET!" var)
+                 (let ((frame (first-frame env)))
+                 (scan (frame-variables frame)
+                 (frame-values frame)))))
+  (env-loop env))
 (define (assignment? exp) (tagged-list? exp 'set!))               
 (define (assignment-variable exp) (cadr exp));;2-elem
 (define (assignment-value exp) (caddr exp));;3-elem
@@ -154,3 +165,46 @@ It is important to understand that:
              (make-if predicate 
                       (sequence->exp (cond-actions first))
                       (exapnd-clauses (cdr clauses))))));;else make-if with (pred cons alt)
+                      
+------------------------------------------------------
+------------------------------------------------------
+;;APPLY HELPER
+(define (enclosing-environment exp) (cdr exp));;right bable of procedure
+(define (first-frame env) (car env))
+(define the-empty-environment '())
+
+(define (make-procedure param body env)
+  (list 'procedure param body env))
+(define (compound-procdeure? proc)
+        (tagged-list proc 'procedure))
+(define (procedure-parameters proc) (cadr proc))
+(define (procedure-environment proc (cadddr proc))
+(define (procedure-body env) (caddr proc))
+
+;;frame as helper for environment, here frame is a list of val and corresponding var
+(define (make-frame var val) (cons var val))
+(define (frame-variables frame) (car frame))
+(define (frame-values frame) (cadr frame))
+(define (add-binding-to-frame! var val frame)
+ (set-car! frame (cons var (car frame)))
+ (set-cdr! frame (cons val (cdr frame))))
+
+(define (extend-environment var val env)
+  (if (= (length var) (length val))
+      (cons (make-frame var val) env)
+      (if (< (length vars) (length vals))
+ (error "Too many arguments supplied" vars vals)
+ (error "Too few arguments supplied" vars vals))))
+ 
+ (define (look-up-variable exp env)
+  (define (env-loop env)
+   (define (scan vars vals)
+     (cond ((null? vars) (enclosing-environment env)))
+           ((eq? exp (car vars)) (car vals))
+           (else (scan (cdr vars) (cdr vals)))))
+     (if (eq? env the-empty-environment)
+         (error "Unbound variable" var)
+         (let ((frame (first-frame env)))
+        (scan (frame-variables frame)
+              (frame-values frame)))))
+ (env-loop env))
