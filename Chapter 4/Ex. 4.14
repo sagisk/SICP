@@ -1,0 +1,10 @@
+(and? exp) (eval-and exp env)
+
+(define and? exp) (tagged-type? exp 'and))
+(define (eval-and exp env)
+ (define (eval-exp exps)
+  (cond ((null? exps) true)
+        ((true? (eval (car exps) env)) 
+                  (eval-and (cdr exps) env))
+        (else false)))
+   (eval-exp (cdr exp)))     
