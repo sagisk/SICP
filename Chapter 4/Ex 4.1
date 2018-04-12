@@ -1,0 +1,15 @@
+(define (list-of-values exp env);;needed to evaluate arguments of exp
+      (if (no-operands? exp)
+           '()
+          (cons (eval (first-operand exp) env)
+                (list-of-values (rest-operands exp) env))))
+                
+;; modified                
+(define (list-of-values exp env)
+ ((if (no-operands? exp)
+           '()
+         (let ((right (eval (first-operand exp) env)))
+         (let (left (list-of-values (rest-opernads exp) env)))
+                           (cons right left)))))
+                         
+       
