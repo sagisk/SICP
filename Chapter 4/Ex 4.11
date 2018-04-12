@@ -1,0 +1,6 @@
+(define (make-frame var val) (list (cons var val)))
+(define (frame-variables frame) (cadr frame))
+(define (frame-values frame) (caddr frame))
+(define (add-binding-to-frame! var val frame)
+ (set-car! frame (cons var (cadr frame)))
+ (set-cdr! frame (cons val (caddr frame))))
