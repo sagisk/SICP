@@ -1,0 +1,13 @@
+(define (let->combination exp env)
+  (cons (make-lambda (let-var exp);;cons since make-lambda take 2 arguments
+                     (let-body exp))
+                     (let-exp exp)));;evaluate variables, body on expressions of let
+(define (let-var exp) (map (car (cadr exp))))
+(define (let-body exp) (cddr exp))
+(define (let-exp exp) (mapr (cadr (cadr exp)))
+                     
+((let? exp) (let->combination exp emv))
+
+(define (let? exp) (tagged-list? exp 'let))
+
+                     
