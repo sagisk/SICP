@@ -36,40 +36,61 @@ It is important to understand that:
           (else
  (error
  "Unknown procedure type -- APPLY" procedure))))
- 
+ ------------------------------------------------------
  ;; EVAL HELPERS
- (define (list-of-values exp env);;needed to evaluate arguments of exp
+(define (self-evaluating? exp);; strings & numbers
+    (cond ((number? exp) true)
+          ((string? exp) true)
+          (else false)))
+(define (variable? exp) (symbol? exp))
+(define (quoted? exp)
+   (tagged-list? exp 'quote))
+(define (text-of-quotation exp) (cadr exp));; the form is (quote text)
+ 
+(define (tagged-list? exp tag)
+    (if (pair? exp)
+        (eq? (car exp) tag)
+        false))
+          
+(define (list-of-values exp env);;needed to evaluate arguments of exp
       (if (no-operands? exp)
            '()
           (cons (eval (first-operand exp) env)
                 (list-of-values (rest-operands exp) env))))
                 
-(define (first-operand exp) (car exp))
+(define (first-operand exp) (car exp));; exp form is (oprand opernads [i.e. (* 4 6)])
 (define (rest-operands exp) (cdr exp))
 (define (no-operands? exp) (null? exp))
- 
- (define (eval-if exp env) ;;have form (if pred cons alt)
+(define (operator exp) (car exp))
+(define (operands exp) (cdr exp))
+ ------------------------------------------------------
+ ;; EVAL-IF
+(define (eval-if exp env) ;;have form (if pred cons alt)
    (if (true? (eval (predicate exp) env))
        (eval (consequent exp) env)
        (eval (alternative exp) env)))
-   
- (define (predicate exp) (cadr exp))
- (define (consequent exp) (caddr exp))
- (define (alternative exp) 
-     (if (not (null? (cdddr exp))
+(define (if? exp) (tagged-list? exp 'if))
+(define (predicate exp) (cadr exp))
+(define (consequent exp) (caddr exp))
+(define (alternative exp) 
+     (if (not (null? (cdddr exp)))
             (cadddr exp)
             'false))
- 
- 
+ ------------------------------------------------------ 
+ ;; BEGIN_EVAL
 (define (eval-sequence exp env)
   (cond ((last-exp? exp) (eval (first-exp exp) env))
         (else
         (eval (first-exp exp) env)
         (eval-sequence (rest-exp exp) env))))
  
+(define (begin? exp) (tagged-list? exp 'begin))
+(define (last-exp? seq) (null? (cdr seq)))
 (define (first-exp exp) (car exp))
 (define (rest-exp exp) (cdr exp))
 
+ ------------------------------------------------------
+;; ASSIGNMENT & DEFINITION EVAL
 (define (eval-assignment exp env)
    (set-variable-value! (assignment-variable exp)
                         (eval (assignment-value exp) env)
@@ -79,6 +100,7 @@ It is important to understand that:
 (define (set-variable-value! var val env)
         (begin (set! var val)
                (expand-environment var val env)))
+(define (assignment? exp) (tagged-list? exp 'set!))               
 (define (assignment-variable exp) (cadr exp));;2-elem
 (define (assignment-value exp) (caddr exp));;3-elem
 
@@ -87,16 +109,48 @@ It is important to understand that:
                     (eval (definition-value exp) env)
                      env)
          'ok) 
-
+(define (definition? exp) (tagged-list? exp 'lambda))
 (define (define-value! var val env)
         (begin (set! var val)
                (expand-environment var val env)))
 (define (definition-variable exp)
-   (if (symbol? (cadr exp)
+   (if (symbol? (cadr exp))
          (cadr exp)
          (caadr exp)))
 (define (definition-value exp)
-   (if (symbol? (cadr exp)
+   (if (symbol? (cadr exp))
        (caddr exp)
        (make-lambda  (cdadr exp) ;; formal parameters
                      (cddr exp)))) ;; body
+ ------------------------------------------------------
+ ;;COND_EVAL
+ 
+(define (sequence->exp seq)
+  (cond ((null? seq) seq)
+        ((last-exp? seq) (first-exp seq))
+        (else (make-begin seq))))
+(define (make-begin seq) (cons 'begin seq))
+
+(define (cond? exp) (tagged-list? exp 'cond))
+(define (cond-clauses exp) (cdr exp))
+(define (cond-else-clause? clause)
+        (eq? (cond-predicate clause) 'else))
+(define (cond-predicate clause) (car clause))
+(define (cond-actions clause) (cdr clause))
+
+(define (cond? exp) (tagged-list? exp 'cond))
+(define (cond->if exp)
+        (expand-clauses (cond-clauses exp)))
+
+(define (expand-clauses clauses)
+  (if (null? clauses)
+       'false
+      (let ((predicate (cond-predicate clauses))
+            (action (cond-actions clauses)))
+            (if (cond-else-clasue? predicate);;if else make-begin
+                  (sequence->exp action)
+                  (error "ELSE clause isn't last -- COND->IF"
+                clauses))
+             (make-if predicate 
+                      (sequence->exp (cond-actions first))
+                      (exapnd-clauses (cdr clauses))))));;else make-if with (pred cons alt)
