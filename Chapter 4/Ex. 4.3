@@ -1,0 +1,42 @@
+(define (eval exp env)
+  (cond ((self-evaluating? exp) exp)
+        ((variable? exp) (look-up-variable exp env));;search variable(symbol) in environment
+        ((quoted? exp) (text-of-quotation exp env));;extract the value of quotation
+        ((assignment? exp) (eval-assignment exp env));;assign value to variable of exp in env
+        ((definition? exp) (eval-definition exp env))
+        ((if? exp) (eval-if exp env));; if predicate true evaluate consequent else alternatve
+        ((lambda? exp)
+          (make-procedure (lambda-paramters exp)
+                          (lambda body exp)
+                          env))
+        ((begin? exp) (eval-sequence (begin-actions exp) env));; eval expressions in their natural order
+        ((cond? exp) (eval (cond->if exp) env))
+        ((application? exp)
+            (apply (eval (operator exp) env)
+                   (list-of-values (operands exp) env)));;apply takes procedures & arguments
+                   ;;therefore eval operator to get value and eval operands to get arguments
+        (else (error "Unknown expression type -- EVAL" exp))))
+        
+  ;;modified
+  
+(define (evaln exp env) 
+         (cond ((self-evaluating? exp) exp) 
+               ((variable? exp) (lookup-variable-value exp env)) 
+               ((get 'op (car exp)) (apply (get 'op (car exp)) exp env))
+               (application? exp)
+               (apply (eval (operator exp) env)
+                   (list-of-values (operands exp) env)))
+        (else (error "Unknown expression type -- EVAL" exp))))
+        
+   (define get (table 'lookup))
+   (define put (table 'insert))
+   (put 'op 'quote text-of-quotation)
+   (put 'op 'assign eval-assignment)
+   (put 'op 'define eval-definition)
+   (put 'op 'if eval-if)
+   (put 'op 'lambda (make-procedure (lambda-paramters exp)
+                          (lambda body exp)
+                          env))
+   (put 'op 'begin (lambda(x y) (eval-sequence (begin-actions x) y))
+   (put 'op 'cond (lambda (x y) (eval (cond->if x) y))
+   
