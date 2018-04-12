@@ -1,0 +1,37 @@
+ (<test> => <recipient>)
+ 
+ (define (cond? exp) (tagged-list exp 'cond))
+(define (cond-clauses exp) (cdr exp))
+(define (cond-else-clause? clause)
+  (eq? (cond-predicate clause) (car clause)))
+(define (cond-predicate clause) (car clause))
+(define (cond-actions clause) (cdr clause))
+(define (cond->if exp)
+  (expand-clauses (cond-clauses exp)))
+  
+  (define (cond? exp) (tagged-list? exp 'cond))
+(define (cond->if exp)
+        (expand-clauses (cond-clauses exp)))
+        
+(define (cond-recipient-clause? clause)
+  (tagged-list (cond-actions clause) '=>))
+(define (cond-recipient clause)
+  (cadr (cond-actions clause)))        
+
+(define (expand-clauses clauses)
+  (if (null? clauses)
+       'false
+      (let ((predicate (cond-predicate clauses))
+            (action (cond-actions clauses)))
+            (if (cond-else-clasue? predicate);;if else make-begin
+                  (sequence->exp action)
+                  (error "ELSE clause isn't last -- COND->IF"
+                clauses))
+           (if (cond-recipient-clause? predicate)
+                (make-if (cond-predicate predicate)
+                         (list (cond-recipient predicate) (cond-predicate predicate))
+                         'false)
+             (make-if predicate 
+                      (sequence->exp (cond-actions first))
+                      (exapnd-clauses (cdr clauses)))))))
+                      
