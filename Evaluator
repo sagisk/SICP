@@ -1,0 +1,102 @@
+It is important to understand that:
+* EVAL takes EXPRESSIONS & ENVIRONMENT
+* APPLY takes PROCEDURES & ARGUMENTS
+
+;;evaluator
+(define (eval exp env)
+  (cond ((self-evaluating? exp) exp)
+        ((variable? exp) (look-up-variable exp env));;search variable(symbol) in environment
+        ((quoted? exp) (text-of-quotation exp env));;extract the value of quotation
+        ((assignment? exp) (eval-assignment exp env));;assign value to variable of exp in env
+        ((definition? exp) (eval-definition exp env))
+        ((if? exp) (eval-if exp env));; if predicate true evaluate consequent else alternatve
+        ((lambda? exp)
+          (make-procedure (lambda-paramters exp)
+                          (lambda body exp)
+                          env))
+        ((begin? exp) (eval-sequence (begin-actions exp) env));; eval expressions in their natural order
+        ((cond? exp) (eval (cond->if exp) env))
+        ((application? exp)
+            (apply (eval (operator exp) env)
+                   (list-of-values (operands exp) env)));;apply takes procedures & arguments
+                   ;;therefore eval operator to get value and eval operands to get arguments
+        (else (error "Unknown expression type -- EVAL" exp))))
+        
+;;apply
+(define (apply proc arg)
+  (cond ((primitive? proc)
+          (apply-primitive-procedure proc arg))
+         ((compound-procedure? proc);; if compound divide proc into pieces by evaluating it
+          (eval-sequence
+            (procedure-body proc);;assign arguments to variables
+            (extend-environment
+               (procedure-paramters proc)
+                arg
+               (procdeure-environment proc))))
+          (else
+ (error
+ "Unknown procedure type -- APPLY" procedure))))
+ 
+ ;; EVAL HELPERS
+ (define (list-of-values exp env);;needed to evaluate arguments of exp
+      (if (no-operands? exp)
+           '()
+          (cons (eval (first-operand exp) env)
+                (list-of-values (rest-operands exp) env))))
+                
+(define (first-operand exp) (car exp))
+(define (rest-operands exp) (cdr exp))
+(define (no-operands? exp) (null? exp))
+ 
+ (define (eval-if exp env) ;;have form (if pred cons alt)
+   (if (true? (eval (predicate exp) env))
+       (eval (consequent exp) env)
+       (eval (alternative exp) env)))
+   
+ (define (predicate exp) (cadr exp))
+ (define (consequent exp) (caddr exp))
+ (define (alternative exp) 
+     (if (not (null? (cdddr exp))
+            (cadddr exp)
+            'false))
+ 
+ 
+(define (eval-sequence exp env)
+  (cond ((last-exp? exp) (eval (first-exp exp) env))
+        (else
+        (eval (first-exp exp) env)
+        (eval-sequence (rest-exp exp) env))))
+ 
+(define (first-exp exp) (car exp))
+(define (rest-exp exp) (cdr exp))
+
+(define (eval-assignment exp env)
+   (set-variable-value! (assignment-variable exp)
+                        (eval (assignment-value exp) env)
+                        env)
+     'ok)                   
+               
+(define (set-variable-value! var val env)
+        (begin (set! var val)
+               (expand-environment var val env)))
+(define (assignment-variable exp) (cadr exp));;2-elem
+(define (assignment-value exp) (caddr exp));;3-elem
+
+(define (eval-definition exp env)
+  (define-variable! (definition-variable exp)
+                    (eval (definition-value exp) env)
+                     env)
+         'ok) 
+
+(define (define-value! var val env)
+        (begin (set! var val)
+               (expand-environment var val env)))
+(define (definition-variable exp)
+   (if (symbol? (cadr exp)
+         (cadr exp)
+         (caadr exp)))
+(define (definition-value exp)
+   (if (symbol? (cadr exp)
+       (caddr exp)
+       (make-lambda  (cdadr exp) ;; formal parameters
+                     (cddr exp)))) ;; body
