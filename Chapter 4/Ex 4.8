@@ -1,0 +1,17 @@
+(define (fib n)
+ (let fib-iter ((a 1)
+ (b 0)
+ (count n))
+ (if (= count 0)
+ b
+ (fib-iter (+ a b) a (- count 1)))))
+ 
+;;(let <var> ((<var1> <exp1>)
+;;             (<var2> <exp2>)) 
+;;   <body>)
+ 
+ (define (let->combination exp env)
+       (list (var exp) (make-lambda (let-var exp)
+                                    (let-body exp))
+                                    (let-exp exp))))
+                                    
