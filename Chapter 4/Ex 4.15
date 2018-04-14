@@ -1,0 +1,8 @@
+(define (run-forever) (run-forever))
+(define (try p)
+ (if (halts? p p)
+ (run-forever)
+ 'halted))
+ 
+evaluation of (try try) will check if try halts try since it is true we will enter infinite loop.
+if halts? give false the procedure will automaticaly halt, namely will give 'halted as a result
