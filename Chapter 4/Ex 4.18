@@ -1,0 +1,24 @@
+(lambda <vars>
+ (let ((u '*unassigned*)
+ (v '*unassigned*))
+ (let ((a <e1>)
+ (b <e2>))
+ (set! u a)
+ (set! v b))
+ <e3>))
+ 
+ (define (solve f y0 dt)
+ (define y (integral (delay dy) y0 dt))
+ (define dy (stream-map f y))
+ y)
+ 
+ (define (solve f y0 dt)
+  (let ((y '*unassigned*)
+        (dy '*unassigned*))
+        (let ((a (integral (delay dy) y0 dt))
+               (b (stream-map f y))
+        (set! y a)
+        (set! dy b))
+        y))
+        
+   ;;won't work since a requires dy but it was set! later.     
