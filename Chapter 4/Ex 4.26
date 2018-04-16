@@ -1,0 +1,5 @@
+(define (unless condition usual-value exceptional-value)
+ (if condition exceptional-value usual-value))
+ 
+(define (unless->if expr) 
+   (make-if (unless-predicate expr) (unless-consequence expr) (unless-alternative expr)))
