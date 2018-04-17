@@ -1,0 +1,1 @@
+in 'Streams' the arguments are evaluated when accessed, in 'lazy streams' it is evaluated only when primitive call it.
