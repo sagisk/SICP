@@ -1,0 +1,8 @@
+import openpyxl
+
+wb = openpyxl.load_workbook('mine.xlsx')
+N = 4
+M = 2
+wb.get_sheet_by_name('Shhet1').insert_rows(N,M)
+
+wb.save('mine.xlsx')
