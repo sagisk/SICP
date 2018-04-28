@@ -1,0 +1,10 @@
+import openpyxl
+
+wb = openpyxl.load_workbook('mine.xlsx')
+wb.create_sheet('Text')
+txt = open('text.txt', 'r')
+text = txt.readlines()
+for i in range(0, len(text)): #columns
+    for j in range(0, len(text[i].split())): #rows
+        wb.get_sheet_by_name('Text').cell(j+1, i+1).value = text[i].split()[j]
+wb.save('mine.xlsx')
