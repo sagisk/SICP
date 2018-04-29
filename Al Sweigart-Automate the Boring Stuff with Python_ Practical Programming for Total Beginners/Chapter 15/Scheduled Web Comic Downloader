@@ -1,0 +1,18 @@
+import bs4, requests, time
+
+last_cheked = None
+res = requests.get('https://xkcd.com/1986/')
+res.raise_for_status()
+Bs=bs4.BeautifulSoup(res.text)
+node = Bs.select('#ctitle')
+
+for i in range(0,86400): # 86400 seconds in a day
+ if not(node == last_cheked):
+    last_cheked = node
+    comic_url = 'https:'+Bs.select('#comic img')[0].attrs['src']
+    comic_data = requests.get(comic_url).content
+    with open('comic_name'+'.jpg','wb') as handler:
+        handler.write(comic_data)
+ else:
+    time.sleep(i)
+    continue
