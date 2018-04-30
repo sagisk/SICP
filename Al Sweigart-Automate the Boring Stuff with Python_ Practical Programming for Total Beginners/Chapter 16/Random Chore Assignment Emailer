@@ -1,0 +1,21 @@
+import smtplib, random
+
+chores = ['dishes', 'bathroom', 'vacuum', 'walk dog']
+mails = ['sad@gmail','afew@gmail','sdgf@gmail','qere@gmail']
+smtp = smtplib.SMTP('smtp.example.com',568)
+smtp.ehlo()
+smtp.starttls()
+smtp.login('login','password')
+for mail in mails:
+ for choice in chores:
+  smtp.sendmail('mymail',mail,'Subject: Chores\n Do the ' + choice)
+  
+ smtp.quit()  
+# second trial
+for mail in mails:
+ for choice in chores:
+  chore = random.choice(chores)
+  smtp.sendmail('mymail',mail,'Subject: Chores\n Do the ' + chore)
+  chores.remove(chore)
+
+ smtp.quit()
