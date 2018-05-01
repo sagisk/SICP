@@ -1,0 +1,21 @@
+import os
+from PIL import Image
+
+logo = Image.open('C:\\Users\\Sargis\\Desktop\\automate_online-materials\\catlogo.png')
+logo_width, logo_height = logo.size
+log = logo.resize((100,100))
+log.save('logo.png')
+log = Image.open('C:\\Users\\Sargis\\PycharmProjects\\hello\\logo.png')
+
+for image in os.listdir('.'):
+    image = image.lower()
+    if image.endswith('.png') or image.endswith('.jpeg'):
+        img=Image.open('C:\\Users\\Sargis\\PycharmProjects\\hello\\'+image)
+        width, height = img.size
+        if logo_width - 50 <= width <= logo_width + 50 or logo_height - 50 <= height <= logo_height + 50:
+            imag = img.resize((logo_width*2,logo_height*2))
+            imag.paste(log,(0,0))
+            imag.save('resized%s'%str(image))
+        else:
+            img.paste((img, logo))
+            img.save('resized%s' % str(image))
