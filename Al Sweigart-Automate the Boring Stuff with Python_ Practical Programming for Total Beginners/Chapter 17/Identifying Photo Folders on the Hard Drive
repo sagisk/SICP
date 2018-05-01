@@ -1,0 +1,13 @@
+for foldername, subfolders, filenames in os.walk('.'):
+  numPhotoFiles = 0
+  numNonPhotoFiles = 0
+  for filename in filenames:
+      if filename.endswith('.png') or filename.endswith('.jpeg'):
+         image = Image.open(os.path.join(foldername, filename))
+         width,height = image.size
+         if width > 500 and height > 500:
+               numPhotoFiles += 1
+      else:
+         numNonPhotoFiles += 1
+      if numPhotoFiles > numNonPhotoFiles:
+            print(foldername)
