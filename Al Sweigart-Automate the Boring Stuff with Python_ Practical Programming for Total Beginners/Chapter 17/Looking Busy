@@ -1,0 +1,7 @@
+import pyautogui
+
+pyautogui.PAUSE = 1
+pyautogui.FAILSAFE
+
+for i in range(0,600):
+ pyautogui.moveRel(10,5,duration = 0.25)
