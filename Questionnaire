@@ -4,8 +4,9 @@ import pyautogui, time, random
 def helper(x, direction):
         assert type(direction) == type('a')
         try:
-            if x == 1 and direction == 'right':
-                pyautogui.typewrite(['\t'])
+            if x == 1:
+                pyautogui.typewrite(['down'])
+                pyautogui.typewrite(['up','\t'])
             else:
                 while x != 1:
                         time.sleep(1)
@@ -14,6 +15,8 @@ def helper(x, direction):
                 pyautogui.typewrite(['\t'])
         except NameError:
                 print('Enter a string')
+
+
 
 def check_box_helper(num,x,y):
         pyautogui.click(x, y)
@@ -37,23 +40,38 @@ def checkBOX(arg,x1,y1,x2,y2,n=2):
         time.sleep(3)
         check_box_helper(arg - n, x2, y2)
         
+def scale():
+    for question in range(1, 9):
+        if third == 1 or third == 5 or third == 8 and question == 4 or third == 1 or third == 2 or third == 7 and question == 7:  # clothes quality
+            temp = random.choice(range(3, 6))
+            print(temp)
+            if temp == 1:
+                pyautogui.typewrite(['left'])
+                pyautogui.typewrite(['right', '\t'])
+            else:
+                helper(temp, 'right')
+        else:
+            temp_1 = random.choice(range(1, 6))
+            print(temp_1)
+            if temp_1 == 1:
+                pyautogui.typewrite(['left'])
+                pyautogui.typewrite(['right', '\t'])
+            else:
+                helper(temp_1, 'right')
+
 submit = (92,656)
 another_submit = (124,418)
 im = pyautogui.screenshot()
 submitColor= im.getpixel((92,656))
 first_item = (63,708)
 check_box = (61,511)
-list_of_cities = ('Санкт-Петербург','Москва')
+cities = ('Moscow','Saicnt-Petersburg','Yekaterinburg','Sochi','Nizhny Novgorod')
 
-while pyautogui.pixelMatchesColor(submit[0],submit[1],submitColor):
-        time.sleep(2)
+while not pyautogui.pixelMatchesColor(submit[0],submit[1],submitColor):
+        time.sleep(5)
         first = random.choice(range(1, 6))
         pyautogui.click(first_item)
-        if first == 1:
-            pyautogui.typewrite(['down'])
-            pyautogui.typewrite(['up','\t'])
-        else:
-            helper(first, 'down')
+        helper(first, 'down')
         second_1 = random.choice(range(1, 11))
         second_2 = random.choice(range(1, 11))
         if second_1 == second_2:
@@ -68,42 +86,24 @@ while pyautogui.pixelMatchesColor(submit[0],submit[1],submitColor):
             pyautogui.typewrite(['\t'])
         third = random.choice((second_1,second_2))
         helper(third, 'down')
-        print('third:',third)
         pyautogui.typewrite(['\t'])
-        time.sleep(5)
-        for question in range(1,9):
-             if third == 1 or third == 5 or third == 8  and question == 4 or third == 1 or third == 2 or third == 7 and question == 7: #clothes quality
-                temp = random.choice(range(3,6))
-                print(temp)
-                if temp == 1:
-                    pyautogui.typewrite(['left'])
-                    pyautogui.typewrite(['right', '\t'])
-                else:
-                    helper(temp, 'right')
-             else:
-                temp_1 = random.choice(range(1, 6))
-                print(temp_1)
-                if temp_1 == 1:
-                    pyautogui.typewrite(['left'])
-                    pyautogui.typewrite(['right', '\t'])
-                else:
-                    helper(temp_1, 'right')
+        scale()
         pyautogui.typewrite(['\t'])
         if third == second_1:
                 helper(second_2,'down')
         else:
                 helper(second_1,'down')
-        for question in range(1,9):
-             if third == 1 or third == 5 or third == 8  and question == 4 or third == 1 or third == 2 or third == 7 and question == 7: #clothes quality
-                temp = random.choice(range(3,6))
-                helper(temp,'right')
-             else:
-                temp_1 = random.choice(range(1, 6))
-                helper(temp_1, 'right')
+        scale()
+        pyautogui.typewrite(['\t'])
         pyautogui.typewrite(['\t'])
         age = random.choice(range(1,6))
         helper(age, 'down')
         gender = random.choice(range(1,3))
         helper(gender, 'down')
-        pyautogui.typewrite(['\t',city[0]])
-        time.sleep(5)   
+        city = random.choice(cities)
+        for letter in city:
+            pyautogui.typewrite([letter])
+        pyautogui.typewrite(['\t'])
+        pyautogui.typewrite(['enter'])
+        time.sleep(5)
+        pyautogui.click(another_submit[0],another_submit[1])
